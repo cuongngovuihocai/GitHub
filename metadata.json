@@ -1,0 +1,5 @@
+{
+  "name": "GitHub Pages Deploy Configurator",
+  "description": "Generate GitHub Actions workflow files to easily deploy Google AI Studio apps to GitHub Pages.",
+  "requestFramePermissions": []
+}
