@@ -148,22 +148,51 @@ export default defineConfig({
       color: 'blue',
       content: (
         <div className="space-y-3 mt-3 text-sm text-slate-600">
-          <p>Truy cập vào repository của bạn trên GitHub và làm theo các bước:</p>
-          <ol className="list-decimal list-inside space-y-2 ml-1">
-            <li>Nhấn nút <strong>Add file</strong> &rarr; <strong>Create new file</strong>.</li>
-            <li>Ở ô tên file, gõ chính xác đường dẫn sau: <br/>
-              <code className="bg-pink-50 text-pink-600 px-2 py-1 rounded border border-pink-100 font-mono text-xs mt-1 inline-block">.github/workflows/deploy.yml</code>
-              <div className="mt-2 mb-4 pl-5">
-                <img src="https://lh3.googleusercontent.com/d/12Eew2CkRbDccG4jO0W5BSZw9_VvfTe5b" alt="Tạo file mới" className="rounded-md border border-slate-200 w-full max-w-md shadow-sm" referrerPolicy="no-referrer" />
+          <p>Để thêm file cấu hình deploy lên repo GitHub, bạn chọn 1 trong 2 cách sau:</p>
+          <div className="flex flex-col gap-4">
+            
+            {/* Cách 1 */}
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-semibold">Cách 1</span>
+                <span className="font-semibold text-slate-800 text-sm">Tạo trực tiếp trên GitHub Web (Khuyên dùng)</span>
               </div>
-            </li>
-            <li>Copy toàn bộ đoạn code ở khung màu đen bên phải và dán vào nội dung file.</li>
-            <li>Nhấn nút <strong>Commit changes...</strong> màu xanh lá cây ở góc phải.
-              <div className="mt-2 pl-5">
-                <img src="https://lh3.googleusercontent.com/d/1iLomZm1sqFz2r4O0R11B5yrBE4zNL1Uc" alt="Commit file" className="rounded-md border border-slate-200 w-full max-w-md shadow-sm" referrerPolicy="no-referrer" />
+              <ol className="list-decimal list-inside space-y-3 ml-1 text-xs text-slate-600">
+                <li>Trong repo của bạn trên GitHub, nhấn nút <strong>Add file</strong> &rarr; <strong>Create new file</strong>.</li>
+                <li>Ở ô tên file, gõ chính xác đường dẫn sau: <br/>
+                  <code className="bg-pink-50 text-pink-600 px-2 py-1 rounded border border-pink-100 font-mono text-[11px] mt-1 inline-block font-bold">.github/workflows/deploy.yml</code>
+                  <div className="mt-2">
+                    <img src="https://lh3.googleusercontent.com/d/12Eew2CkRbDccG4jO0W5BSZw9_VvfTe5b" alt="Tạo file mới" className="rounded-md border border-slate-200 w-full max-w-md shadow-sm" referrerPolicy="no-referrer" />
+                  </div>
+                </li>
+                <li>Copy toàn bộ đoạn code ở khung màu đen bên phải và dán vào nội dung file.</li>
+                <li>Nhấn nút <strong>Commit changes...</strong> màu xanh lá cây ở góc phải.
+                  <div className="mt-2">
+                    <img src="https://lh3.googleusercontent.com/d/1iLomZm1sqFz2r4O0R11B5yrBE4zNL1Uc" alt="Commit file" className="rounded-md border border-slate-200 w-full max-w-md shadow-sm" referrerPolicy="no-referrer" />
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            {/* Cách 2 */}
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Cách 2</span>
+                <span className="font-semibold text-slate-800 text-sm">Tải file .yml về và Upload lên GitHub</span>
               </div>
-            </li>
-          </ol>
+              <ol className="list-decimal list-inside space-y-2 ml-1 text-xs text-slate-600">
+                <li>Nhấn nút <strong className="text-blue-600 font-semibold inline-flex items-center gap-1 bg-white border border-slate-200 px-2 py-1 rounded shadow-xs hover:bg-slate-50 transition-colors cursor-pointer"><Download className="w-3 h-3" /> Tải file .yml</strong> ở góc trên bên phải của khung code màu đen bên cạnh.</li>
+                <li>
+                  Để file chạy đúng cấu trúc, bạn cần đưa file này vào đúng thư mục <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-[11px] font-bold">.github/workflows/</code> trên GitHub:
+                  <ul className="list-disc list-inside mt-2 ml-4 space-y-1.5 text-slate-500">
+                    <li>Nếu bạn đã tạo thư mục này từ trước: Hãy truy cập vào thư mục <code className="font-mono text-[11px]">workflows</code> trên GitHub rồi mới nhấn <strong>Add file</strong> &rarr; <strong>Upload files</strong> và chọn file vừa tải về.</li>
+                    <li>Nếu chưa có thư mục: Cách nhanh nhất là kéo thả cả thư mục <code className="font-mono text-[11px] font-bold">.github</code> (chứa thư mục con <code className="font-mono text-[11px] font-bold">workflows</code> và file <code className="font-mono text-[11px] font-bold">deploy.yml</code> bên trong) từ máy tính của bạn vào trang web GitHub.</li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+
+          </div>
         </div>
       )
     },
@@ -258,7 +287,7 @@ export default defineConfig({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Left Column: Configuration & Instructions */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-7 space-y-6">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -376,7 +405,7 @@ export default defineConfig({
           </div>
 
           {/* Right Column: Code Preview */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-5">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
