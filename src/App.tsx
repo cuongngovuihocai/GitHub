@@ -103,15 +103,31 @@ jobs:
     URL.revokeObjectURL(url);
   };
 
-  const viteConfigExample = `import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+  const viteConfigExample = `import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+import {defineConfig, loadEnv} from 'vite';
 
-export default defineConfig({
-  plugins: [react()],
-  // 👇 BẮT BUỘC: Thêm dòng này để sửa lỗi trắng trang (404)
-  // Thay 'ten-repo-cua-ban' bằng tên repository thực tế trên GitHub
-  base: '/ten-repo-cua-ban/', 
-})`;
+export default defineConfig(({mode}) => {
+  const env = loadEnv(mode, '.', '');
+  return {
+    // 👇 BẮT BUỘC: Thêm dòng này để sửa lỗi trắng trang (404)
+    // Thay 'ten-repo-cua-ban' bằng tên repository thực tế trên GitHub
+    base: '/ten-repo-cua-ban/',
+    plugins: [react(), tailwindcss()],
+    define: {
+      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '.'),
+      },
+    },
+    server: {
+      hmr: process.env.DISABLE_HMR !== 'true',
+    },
+  };
+});`;
 
   const steps = [
     {
@@ -203,30 +219,55 @@ export default defineConfig({
       icon: <Code2 className="w-4 h-4" />,
       color: 'amber',
       content: (
-        <div className="space-y-3 mt-3 text-sm text-slate-600">
-          <div className="bg-amber-50 border border-amber-200 text-amber-800 px-3 py-2 rounded-md flex gap-2">
+        <div className="space-y-4 mt-3 text-sm text-slate-600">
+          <div className="bg-amber-50 border border-amber-200 text-amber-800 px-3 py-2.5 rounded-xl flex gap-2 shadow-xs">
             <Info className="w-5 h-5 shrink-0 text-amber-600" />
             <p className="text-xs leading-relaxed">
               Nếu bạn không làm bước này, trang web sau khi deploy sẽ bị <strong>trắng tinh</strong> do không tìm thấy file CSS/JS (lỗi 404). Ngoại lệ duy nhất là khi repo của bạn có tên dạng <code>username.github.io</code>.
             </p>
           </div>
-          <p>Mở file <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-xs">vite.config.ts</code> trong repo của bạn và thêm thuộc tính <code>base</code> vào bên trong <code>defineConfig</code> như hình dưới:</p>
+
+          <div className="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-xl space-y-2 shadow-xs">
+            <span className="font-bold text-xs uppercase tracking-wider text-blue-700 block">⚠️ Giải thích về "ten-repo-cua-ban" (Rất quan trọng):</span>
+            <p className="text-xs leading-relaxed">
+              Đường dẫn repository của bạn trên GitHub thường có dạng:<br/>
+              <code className="bg-white/80 px-1.5 py-0.5 rounded text-[11px] font-mono break-all inline-block border border-blue-100 text-slate-800 mt-1">https://github.com/ten-user-cua-ban/<strong className="text-pink-600 font-bold">ten-repo-thuc-te</strong></code>
+            </p>
+            <p className="text-xs leading-relaxed">
+              Hãy thay thế chuỗi <code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-pink-600 font-bold">ten-repo-cua-ban</code> thành <strong>tên repository thực tế</strong> của bạn (phần được bôi đỏ ở trên).
+            </p>
+            <p className="text-xs leading-relaxed font-semibold text-blue-900">
+              Ví dụ: Nếu tên repository của bạn là <code className="bg-white px-1.5 py-0.5 rounded font-mono text-pink-600 border border-blue-100 font-bold">my-ai-app</code>, cấu hình sẽ là:<br/>
+              <code className="bg-slate-900 text-green-400 px-2 py-1 rounded text-[11px] font-mono font-bold inline-block mt-1">base: '/my-ai-app/',</code>
+            </p>
+          </div>
+
+          <p>Mở file <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-xs">vite.config.ts</code> trong repo của bạn và thêm thuộc tính <code>base</code> vào bên trong phần <code>return</code> của <code>defineConfig</code> như hướng dẫn bên dưới:</p>
           
           <div className="rounded-lg overflow-hidden border border-slate-200">
             <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-200 text-xs font-mono text-slate-500 flex items-center gap-2">
               <FileCode2 className="w-3.5 h-3.5" /> vite.config.ts
             </div>
-            <pre className="bg-[#0d1117] p-4 text-xs font-mono text-slate-300 overflow-x-auto">
+            <pre className="bg-[#0d1117] p-4 text-xs font-mono text-slate-300 overflow-x-auto leading-relaxed">
               <code>
-                <span className="text-purple-400">import</span> {'{ defineConfig }'} <span className="text-purple-400">from</span> <span className="text-green-300">'vite'</span>{'\n'}
-                <span className="text-purple-400">import</span> react <span className="text-purple-400">from</span> <span className="text-green-300">'@vitejs/plugin-react'</span>{'\n\n'}
-                <span className="text-purple-400">export default</span> <span className="text-blue-300">defineConfig</span>({'{'}{'\n'}
-                {'  '}plugins: [react()],{'\n'}
-                <div className="bg-amber-500/20 -mx-4 px-4 py-1 border-l-2 border-amber-500">
-                  <span className="text-slate-500">{'  '}// 👇 BẮT BUỘC: Thêm dòng này</span>{'\n'}
-                  {'  '}<span className="text-blue-300">base</span>: <span className="text-green-300">'/ten-repo-cua-ban/'</span>,{'\n'}
+                <span className="text-purple-400">import</span> tailwindcss <span className="text-purple-400">from</span> <span className="text-green-300">'@tailwindcss/vite'</span>;{'\n'}
+                <span className="text-purple-400">import</span> react <span className="text-purple-400">from</span> <span className="text-green-300">'@vitejs/plugin-react'</span>;{'\n'}
+                <span className="text-purple-400">import</span> path <span className="text-purple-400">from</span> <span className="text-green-300">'path'</span>;{'\n'}
+                <span className="text-purple-400">import</span> {'{ defineConfig, loadEnv }'} <span className="text-purple-400">from</span> <span className="text-green-300">'vite'</span>;{'\n\n'}
+                <span className="text-purple-400">export default</span> <span className="text-blue-300">defineConfig</span>(({'{ mode }'}) =&gt; {'{'} {'\n'}
+                {'  '}<span className="text-purple-400">const</span> env = <span className="text-blue-300">loadEnv</span>(mode, <span className="text-green-300">'.'</span>, <span className="text-green-300">''</span>);{'\n'}
+                {'  '}<span className="text-purple-400">return</span> {'{'} {'\n'}
+                <div className="bg-amber-500/20 -mx-4 px-4 py-1.5 border-l-2 border-amber-500 my-1">
+                  <span className="text-slate-500">{'    '}// 👇 BẮT BUỘC: Thêm dòng base này và thay 'ten-repo-cua-ban' thành repo của bạn</span>{'\n'}
+                  {'    '}<span className="text-blue-300">base</span>: <span className="text-green-300">'/ten-repo-cua-ban/'</span>,{'\n'}
                 </div>
-                {'}'})
+                {'    '}plugins: [react(), tailwindcss()],{'\n'}
+                {'    '}define: {'{'} {'\n'}
+                {'      '}<span className="text-green-300">'process.env.GEMINI_API_KEY'</span>: JSON.stringify(env.GEMINI_API_KEY),{'\n'}
+                {'    '}{'}'},{'\n'}
+                {'    '}// ... giữ nguyên các dòng cấu hình khác bên dưới{'\n'}
+                {'  '}{'}'};{'\n'}
+                {'}'});
               </code>
             </pre>
           </div>
