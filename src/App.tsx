@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Download, Check, Github, Settings, Terminal, FileCode2, ChevronDown, FolderGit2, Globe, Code2, Info } from 'lucide-react';
+import { Copy, Download, Check, Github, Settings, Terminal, FileCode2, ChevronDown, FolderGit2, Globe, Code2, Info, ZoomIn, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
@@ -9,6 +9,27 @@ export default function App() {
   const [useLockFile, setUseLockFile] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeStep, setActiveStep] = useState<number | null>(1);
+  const [zoomImage, setZoomImage] = useState<string | null>(null);
+
+  const InteractiveImage = ({ src, alt }: { src: string; alt: string }) => {
+    const highResSrc = src.includes('=w') ? src : `${src}=w1600`;
+    return (
+      <div 
+        className="relative group cursor-zoom-in overflow-hidden rounded-xl border border-slate-200 shadow-md bg-white transition-all hover:shadow-lg hover:border-blue-400 mt-2 max-w-2xl w-full"
+        onClick={() => setZoomImage(highResSrc)}
+      >
+        <img 
+          src={highResSrc} 
+          alt={alt} 
+          className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" 
+          referrerPolicy="no-referrer" 
+        />
+        <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-white font-medium text-xs backdrop-blur-[1px]">
+          <ZoomIn className="w-4 h-4" /> Bấm để xem ảnh phóng to rõ nét
+        </div>
+      </div>
+    );
+  };
 
   const getInstallCommand = () => {
     if (useLockFile) {
@@ -150,9 +171,9 @@ export default defineConfig(({mode}) => {
           <div className="bg-slate-800 rounded-lg p-4 text-slate-300 font-medium flex flex-col gap-3 border border-slate-700 shadow-inner">
             <div className="flex items-start gap-3">
               <span className="bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded text-xs border border-blue-500/30 whitespace-nowrap">Cách 1</span>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 w-full">
                 <span className="leading-relaxed">Nhấn menu <strong>Settings</strong> (biểu tượng ⚙️ góc phải trên cùng) &rarr; Chọn <strong>GitHub</strong> và làm theo hình. Cách này thuận tiện hơn.</span>
-                <img src="https://lh3.googleusercontent.com/d/1uQS1uKV9XKCUCp5pqIKamCRXELWQUlg6" alt="Hướng dẫn Export GitHub" className="rounded-md border border-slate-600 w-full max-w-md mt-1" referrerPolicy="no-referrer" />
+                <InteractiveImage src="https://lh3.googleusercontent.com/d/1uQS1uKV9XKCUCp5pqIKamCRXELWQUlg6" alt="Hướng dẫn Export GitHub" />
               </div>
             </div>
             <div className="h-px bg-slate-700/50 w-full"></div>
@@ -186,13 +207,13 @@ export default defineConfig(({mode}) => {
                 <li>Ở ô tên file, gõ chính xác đường dẫn sau: <br/>
                   <code className="bg-pink-50 text-pink-600 px-2 py-1 rounded border border-pink-100 font-mono text-[11px] mt-1 inline-block font-bold">.github/workflows/deploy.yml</code>
                   <div className="mt-2">
-                    <img src="https://lh3.googleusercontent.com/d/12Eew2CkRbDccG4jO0W5BSZw9_VvfTe5b" alt="Tạo file mới" className="rounded-md border border-slate-200 w-full max-w-md shadow-sm" referrerPolicy="no-referrer" />
+                    <InteractiveImage src="https://lh3.googleusercontent.com/d/12Eew2CkRbDccG4jO0W5BSZw9_VvfTe5b" alt="Tạo file mới" />
                   </div>
                 </li>
                 <li>Copy toàn bộ đoạn code ở khung màu đen bên phải và dán vào nội dung file.</li>
                 <li>Nhấn nút <strong>Commit changes...</strong> màu xanh lá cây ở góc phải.
                   <div className="mt-2">
-                    <img src="https://lh3.googleusercontent.com/d/1iLomZm1sqFz2r4O0R11B5yrBE4zNL1Uc" alt="Commit file" className="rounded-md border border-slate-200 w-full max-w-md shadow-sm" referrerPolicy="no-referrer" />
+                    <InteractiveImage src="https://lh3.googleusercontent.com/d/1iLomZm1sqFz2r4O0R11B5yrBE4zNL1Uc" alt="Commit file" />
                   </div>
                 </li>
               </ol>
@@ -298,7 +319,7 @@ export default defineConfig(({mode}) => {
             <li>
               Nhấn vào menu thả xuống và chuyển từ <em>Deploy from a branch</em> sang <strong>GitHub Actions</strong>.
               <div className="mt-3">
-                <img src="https://lh3.googleusercontent.com/d/1RZQKimkfCj1w8komsOToQuk0vtlC7Bq6" alt="Cấu hình GitHub Pages" className="rounded-md border border-slate-200 w-full max-w-md shadow-sm" referrerPolicy="no-referrer" />
+                <InteractiveImage src="https://lh3.googleusercontent.com/d/1RZQKimkfCj1w8komsOToQuk0vtlC7Bq6" alt="Cấu hình GitHub Pages" />
               </div>
             </li>
             <li>Xong! Bây giờ mỗi khi bạn push code lên nhánh <code>{branch}</code>, web sẽ tự động được deploy. Bạn có thể xem tiến trình ở tab <strong>Actions</strong>.</li>
@@ -513,6 +534,49 @@ export default defineConfig(({mode}) => {
         </div>
       </main>
       
+      <AnimatePresence>
+        {zoomImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-slate-950/90 z-50 flex flex-col items-center justify-center p-4 md:p-8 backdrop-blur-md cursor-zoom-out"
+            onClick={() => setZoomImage(null)}
+          >
+            <motion.button
+              className="absolute top-4 right-4 bg-slate-800/80 hover:bg-slate-700 text-white p-2.5 rounded-full transition-colors cursor-pointer"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setZoomImage(null);
+              }}
+            >
+              <X className="w-6 h-6" />
+            </motion.button>
+            <motion.div
+              initial={{ scale: 0.95, y: 10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 10 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative max-w-7xl max-h-[90vh] flex flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={zoomImage}
+                alt="Ảnh phóng to"
+                className="rounded-2xl shadow-2xl max-w-full max-h-[80vh] object-contain border border-slate-700 cursor-zoom-out"
+                onClick={() => setZoomImage(null)}
+                referrerPolicy="no-referrer"
+              />
+              <p className="text-slate-400 text-sm mt-4 bg-slate-900/60 px-4 py-2 rounded-full backdrop-blur-xs font-medium border border-slate-800 select-none">
+                💡 Click vào ảnh hoặc vùng trống bên ngoài để đóng
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <style dangerouslySetInnerHTML={{__html: `
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
