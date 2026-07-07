@@ -4,16 +4,25 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   const [branch, setBranch] = useState('main');
-  const [nodeVersion, setNodeVersion] = useState('20');
+  const [nodeVersion, setNodeVersion] = useState('24');
   const [packageManager, setPackageManager] = useState('npm');
+  const [useLockFile, setUseLockFile] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeStep, setActiveStep] = useState<number | null>(1);
 
   const getInstallCommand = () => {
-    switch (packageManager) {
-      case 'yarn': return 'yarn install --frozen-lockfile';
-      case 'pnpm': return 'pnpm install --frozen-lockfile';
-      default: return 'npm ci';
+    if (useLockFile) {
+      switch (packageManager) {
+        case 'yarn': return 'yarn install --frozen-lockfile';
+        case 'pnpm': return 'pnpm install --frozen-lockfile';
+        default: return 'npm ci';
+      }
+    } else {
+      switch (packageManager) {
+        case 'yarn': return 'yarn install';
+        case 'pnpm': return 'pnpm install';
+        default: return 'npm install';
+      }
     }
   };
 
@@ -55,8 +64,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${nodeVersion}
-          cache: '${packageManager}'
+          node-version: ${nodeVersion}${useLockFile ? `\n          cache: '${packageManager}'` : ''}
           
       - name: Install dependencies
         run: ${getInstallCommand()}
@@ -373,11 +381,30 @@ export default defineConfig(({mode}) => {
                       onChange={(e) => setNodeVersion(e.target.value)}
                       className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
                     >
-                      <option value="18">18</option>
-                      <option value="20">20</option>
                       <option value="22">22</option>
+                      <option value="24">24 (Khuyên dùng)</option>
                     </select>
                   </div>
+                </div>
+
+                <div className="border-t border-slate-100 pt-4 mt-2">
+                  <label className="flex items-start gap-3 cursor-pointer group">
+                    <input 
+                      type="checkbox" 
+                      checked={useLockFile}
+                      onChange={(e) => setUseLockFile(e.target.checked)}
+                      className="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <div className="text-sm">
+                      <span className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">Sử dụng file khóa (Lockfile / Cache)</span>
+                      <p className="text-xs text-slate-500 leading-relaxed mt-0.5">
+                        Chỉ bật khi repo của bạn có file <code className="font-mono text-[11px] bg-slate-100 px-1 rounded">package-lock.json</code>, <code className="font-mono text-[11px] bg-slate-100 px-1 rounded">yarn.lock</code> hoặc <code className="font-mono text-[11px] bg-slate-100 px-1 rounded">pnpm-lock.yaml</code>.
+                      </p>
+                      <p className="text-xs text-amber-600 leading-relaxed mt-1 font-medium">
+                        ⚠️ Nếu bạn xuất code trực tiếp từ Google AI Studio mà chưa từng cài đặt dependencies ở máy khách (để sinh ra file lock), hãy <strong className="underline">tắt tùy chọn này</strong> để tránh lỗi đỏ như hình bạn thấy.
+                      </p>
+                    </div>
+                  </label>
                 </div>
               </div>
             </motion.div>
