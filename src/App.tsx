@@ -94,7 +94,7 @@ jobs:
         run: ${getBuildCommand()}
         
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -150,11 +150,8 @@ export default defineConfig(({mode}) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
-      },
-    },
-    server: {
-      hmr: process.env.DISABLE_HMR !== 'true',
-    },
+      }
+    }
   };
 });`;
 
@@ -187,57 +184,30 @@ export default defineConfig(({mode}) => {
     },
     {
       id: 2,
-      title: 'Thêm file Workflow',
-      shortDesc: 'Tạo file deploy.yml trong repository của bạn.',
-      icon: <FileCode2 className="w-4 h-4" />,
+      title: 'Cấu hình GitHub Pages',
+      shortDesc: 'Bật tính năng deploy bằng GitHub Actions trên kho lưu trữ.',
+      icon: <Globe className="w-4 h-4" />,
       color: 'blue',
       content: (
         <div className="space-y-3 mt-3 text-sm text-slate-600">
-          <p>Để thêm file cấu hình deploy lên repo GitHub, bạn chọn 1 trong 2 cách sau:</p>
-          <div className="flex flex-col gap-4">
-            
-            {/* Cách 1 */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-semibold">Cách 1</span>
-                <span className="font-semibold text-slate-800 text-sm">Tạo trực tiếp trên GitHub Web (Khuyên dùng)</span>
+          <p>Thiết lập chế độ chạy để chuẩn bị tự động hóa deploy:</p>
+          <ol className="list-decimal list-inside space-y-3 ml-1">
+            <li>Vào tab <strong>Settings</strong> của repository vừa tạo trên GitHub.</li>
+            <li>Nhìn menu bên trái, kéo xuống phần <em>Code and automation</em>, chọn <strong>Pages</strong>.</li>
+            <li>Tại mục <strong>Build and deployment</strong>, tìm phần <strong>Source</strong>.</li>
+            <li>
+              Nhấn vào menu thả xuống và chuyển từ <em>Deploy from a branch</em> sang <strong>GitHub Actions</strong>.
+              <div className="mt-3">
+                <InteractiveImage src="https://lh3.googleusercontent.com/d/1RZQKimkfCj1w8komsOToQuk0vtlC7Bq6" alt="Cấu hình GitHub Pages" />
               </div>
-              <ol className="list-decimal list-inside space-y-3 ml-1 text-xs text-slate-600">
-                <li>Trong repo của bạn trên GitHub, nhấn nút <strong>Add file</strong> &rarr; <strong>Create new file</strong>.</li>
-                <li>Ở ô tên file, gõ chính xác đường dẫn sau: <br/>
-                  <code className="bg-pink-50 text-pink-600 px-2 py-1 rounded border border-pink-100 font-mono text-[11px] mt-1 inline-block font-bold">.github/workflows/deploy.yml</code>
-                  <div className="mt-2">
-                    <InteractiveImage src="https://lh3.googleusercontent.com/d/12Eew2CkRbDccG4jO0W5BSZw9_VvfTe5b" alt="Tạo file mới" />
-                  </div>
-                </li>
-                <li>Copy toàn bộ đoạn code ở khung màu đen bên phải và dán vào nội dung file.</li>
-                <li>Nhấn nút <strong>Commit changes...</strong> màu xanh lá cây ở góc phải.
-                  <div className="mt-2">
-                    <InteractiveImage src="https://lh3.googleusercontent.com/d/1iLomZm1sqFz2r4O0R11B5yrBE4zNL1Uc" alt="Commit file" />
-                  </div>
-                </li>
-              </ol>
-            </div>
-
-            {/* Cách 2 */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Cách 2</span>
-                <span className="font-semibold text-slate-800 text-sm">Tải file .yml về và Upload lên GitHub</span>
-              </div>
-              <ol className="list-decimal list-inside space-y-2 ml-1 text-xs text-slate-600">
-                <li>Nhấn nút <strong className="text-blue-600 font-semibold inline-flex items-center gap-1 bg-white border border-slate-200 px-2 py-1 rounded shadow-xs hover:bg-slate-50 transition-colors cursor-pointer"><Download className="w-3 h-3" /> Tải file .yml</strong> ở góc trên bên phải của khung code màu đen bên cạnh.</li>
-                <li>
-                  Để file chạy đúng cấu trúc, bạn cần đưa file này vào đúng thư mục <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-[11px] font-bold">.github/workflows/</code> trên GitHub:
-                  <ul className="list-disc list-inside mt-2 ml-4 space-y-1.5 text-slate-500">
-                    <li>Nếu bạn đã tạo thư mục này từ trước: Hãy truy cập vào thư mục <code className="font-mono text-[11px]">workflows</code> trên GitHub rồi mới nhấn <strong>Add file</strong> &rarr; <strong>Upload files</strong> và chọn file vừa tải về.</li>
-                    <li>Nếu chưa có thư mục: Cách nhanh nhất là kéo thả cả thư mục <code className="font-mono text-[11px] font-bold">.github</code> (chứa thư mục con <code className="font-mono text-[11px] font-bold">workflows</code> và file <code className="font-mono text-[11px] font-bold">deploy.yml</code> bên trong) từ máy tính của bạn vào trang web GitHub.</li>
-                  </ul>
-                </li>
-              </ol>
-            </div>
-
-          </div>
+            </li>
+            <li className="bg-emerald-50 border border-emerald-200 text-emerald-900 p-3 rounded-xl list-none mt-2 flex gap-2">
+              <span className="text-emerald-600 font-bold">💡 Mẹo cực hay:</span>
+              <span className="text-xs leading-relaxed">
+                Việc chuyển cấu hình sang <strong>GitHub Actions</strong> tại bước này giúp cho khi bạn tạo file cấu hình ở Bước 4, hệ thống GitHub sẽ có sẵn quyền deploy và chạy thành công ngay lập tức, <strong>hoàn toàn không gặp bất kỳ lỗi đỏ nào!</strong>
+              </span>
+            </li>
+          </ol>
         </div>
       )
     },
@@ -305,25 +275,69 @@ export default defineConfig(({mode}) => {
     },
     {
       id: 4,
-      title: 'Cấu hình GitHub Pages',
-      shortDesc: 'Bật tính năng deploy bằng GitHub Actions.',
-      icon: <Globe className="w-4 h-4" />,
+      title: 'Thêm file Workflow',
+      shortDesc: 'Tạo file deploy.yml trong repository của bạn.',
+      icon: <FileCode2 className="w-4 h-4" />,
       color: 'blue',
       content: (
         <div className="space-y-3 mt-3 text-sm text-slate-600">
-          <p>Bước cuối cùng để GitHub biết cách chạy file workflow của bạn:</p>
-          <ol className="list-decimal list-inside space-y-3 ml-1">
-            <li>Vào tab <strong>Settings</strong> của repository.</li>
-            <li>Nhìn menu bên trái, kéo xuống phần <em>Code and automation</em>, chọn <strong>Pages</strong>.</li>
-            <li>Tại mục <strong>Build and deployment</strong>, tìm phần <strong>Source</strong>.</li>
-            <li>
-              Nhấn vào menu thả xuống và chuyển từ <em>Deploy from a branch</em> sang <strong>GitHub Actions</strong>.
-              <div className="mt-3">
-                <InteractiveImage src="https://lh3.googleusercontent.com/d/1RZQKimkfCj1w8komsOToQuk0vtlC7Bq6" alt="Cấu hình GitHub Pages" />
+          <p>Để thêm file cấu hình deploy lên repo GitHub, bạn chọn 1 trong 2 cách sau:</p>
+          <div className="flex flex-col gap-4">
+            
+            {/* Cách 1 */}
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-semibold">Cách 1</span>
+                <span className="font-semibold text-slate-800 text-sm">Tạo trực tiếp trên GitHub Web (Khuyên dùng)</span>
               </div>
-            </li>
-            <li>Xong! Bây giờ mỗi khi bạn push code lên nhánh <code>{branch}</code>, web sẽ tự động được deploy. Bạn có thể xem tiến trình ở tab <strong>Actions</strong>.</li>
-          </ol>
+              <ol className="list-decimal list-inside space-y-3 ml-1 text-xs text-slate-600">
+                <li>Trong repo của bạn trên GitHub, nhấn nút <strong>Add file</strong> &rarr; <strong>Create new file</strong>.</li>
+                <li>Ở ô tên file, gõ chính xác đường dẫn sau: <br/>
+                  <code className="bg-pink-50 text-pink-600 px-2 py-1 rounded border border-pink-100 font-mono text-[11px] mt-1 inline-block font-bold">.github/workflows/deploy.yml</code>
+                  <div className="mt-2">
+                    <InteractiveImage src="https://lh3.googleusercontent.com/d/12Eew2CkRbDccG4jO0W5BSZw9_VvfTe5b" alt="Tạo file mới" />
+                  </div>
+                </li>
+                <li>Copy toàn bộ đoạn code ở khung màu đen bên phải và dán vào nội dung file.</li>
+                <li>Nhấn nút <strong>Commit changes...</strong> màu xanh lá cây ở góc phải.
+                  <div className="mt-2">
+                    <InteractiveImage src="https://lh3.googleusercontent.com/d/1iLomZm1sqFz2r4O0R11B5yrBE4zNL1Uc" alt="Commit file" />
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            {/* Cách 2 */}
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Cách 2</span>
+                <span className="font-semibold text-slate-800 text-sm">Tải file .yml về và Upload lên GitHub</span>
+              </div>
+              <ol className="list-decimal list-inside space-y-2 ml-1 text-xs text-slate-600">
+                <li>Nhấn nút <strong className="text-blue-600 font-semibold inline-flex items-center gap-1 bg-white border border-slate-200 px-2 py-1 rounded shadow-xs hover:bg-slate-50 transition-colors cursor-pointer"><Download className="w-3 h-3" /> Tải file .yml</strong> ở góc trên bên phải của khung code màu đen bên cạnh.</li>
+                <li>
+                  Để file chạy đúng cấu trúc, bạn cần đưa file này vào đúng thư mục <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-[11px] font-bold">.github/workflows/</code> trên GitHub:
+                  <ul className="list-disc list-inside mt-2 ml-4 space-y-1.5 text-slate-500">
+                    <li>Nếu bạn đã tạo thư mục này từ trước: Hãy truy cập vào thư mục <code className="font-mono text-[11px]">workflows</code> trên GitHub rồi mới nhấn <strong>Add file</strong> &rarr; <strong>Upload files</strong> và chọn file vừa tải về.</li>
+                    <li>Nếu chưa có thư mục: Cách nhanh nhất là kéo thả cả thư mục <code className="font-mono text-[11px] font-bold">.github</code> (chứa thư mục con <code className="font-mono text-[11px] font-bold">workflows</code> và file <code className="font-mono text-[11px] font-bold">deploy.yml</code> bên trong) từ máy tính của bạn vào trang web GitHub.</li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+
+          </div>
+
+          <div className="bg-emerald-50 border border-emerald-200 text-emerald-950 p-4 rounded-xl space-y-2 shadow-xs mt-4">
+            <span className="font-bold text-xs uppercase tracking-wider text-emerald-700 flex items-center gap-1.5">
+              🎉 Deploy thành công ngay lập tức!
+            </span>
+            <p className="text-xs leading-relaxed">
+              Vì bạn đã hoàn thành việc chuyển cấu hình sang <strong>GitHub Actions</strong> tại <strong>Bước 2</strong> từ trước, ngay khi bạn nhấn Commit file <code>deploy.yml</code>, hệ thống sẽ kích hoạt build và deploy thành công hoàn toàn mà <strong>không gặp bất kỳ lỗi đỏ nào!</strong>
+            </p>
+            <p className="text-xs leading-relaxed">
+              Bạn có thể sang tab <strong>Actions</strong> trên kho lưu trữ để xem tiến trình chạy trực quan. Khi các dấu tích chuyển sang màu xanh lá, trang web của bạn đã chính thức hoạt động trực tuyến!
+            </p>
+          </div>
         </div>
       )
     }
