@@ -190,6 +190,16 @@ export default defineConfig(({mode}) => {
       color: 'blue',
       content: (
         <div className="space-y-3 mt-3 text-sm text-slate-600">
+          <div className="flex flex-wrap gap-2 pb-1">
+            <a 
+              href="https://github.com/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-flex items-center gap-2 bg-[#24292e] hover:bg-[#1a1e22] text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-xs transition-colors cursor-pointer"
+            >
+              <Github className="w-4 h-4" /> Đi tới GitHub.com &rarr;
+            </a>
+          </div>
           <p>Thiết lập chế độ chạy để chuẩn bị tự động hóa deploy:</p>
           <ol className="list-decimal list-inside space-y-3 ml-1">
             <li>Vào tab <strong>Settings</strong> của repository vừa tạo trên GitHub.</li>
@@ -361,11 +371,23 @@ export default defineConfig(({mode}) => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <div className="mb-8 max-w-3xl">
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-3">Hướng dẫn Quy trình</h2>
-          <p className="text-slate-600 text-lg">
-            Đẩy web app được build từ Google AI Studio lên GitHub Pages một cách dễ dàng.
-          </p>
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-6">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-3">Hướng dẫn Quy trình</h2>
+            <p className="text-slate-600 text-lg">
+              Đẩy web app được build từ Google AI Studio lên GitHub Pages một cách dễ dàng.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <a 
+              href="https://github.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#24292e] hover:bg-[#1a1e22] text-white font-medium px-5 py-3 rounded-xl shadow-xs hover:shadow-sm transition-all text-sm cursor-pointer"
+            >
+              <Github className="w-5 h-5" /> Truy cập GitHub &rarr;
+            </a>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
